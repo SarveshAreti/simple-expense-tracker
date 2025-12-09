@@ -1,1 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Tracker</title>
+    <style>
+        body { font-family: Arial; max-width: 500px; margin: 40px auto; }
+        #expenses li { display: flex; justify-content: space-between; padding: 8px 0; }
+    </style>
+</head>
+<body>
+    <h2>Simple Expense Tracker</h2>
+
+    <input id="title" placeholder="Expense Title">
+    <input id="amount" type="number" placeholder="Amount">
+    <button onclick="addExpense()">Add</button>
+
+    <h3>Total: ₹<span id="total">0</span></h3>
+    <ul id="expenses"></ul>
+
+<script>
+let data = JSON.parse(localStorage.getItem("expenses")) || [];
+
+function render() {
+    let list = document.getElementById("expenses");
+    list.innerHTML = "";
+    let total = 0;
+
+    data.forEach((exp, i) => {
+        total += exp.amount;
+        list.innerHTML += `
+            <li>${exp.title} - ₹${exp.amount}
+                <button onclick="removeExpense(${i})">X</button>
+            </li>`;
+    });
+
+    document.getElementById("total").innerText = total;
+    localStorage.setItem("expenses", JSON.stringify(data));
+}
+
+function addExpense() {
+    let title = document.getElementById("title").value;
+    let amount = Number(document.getElementById("amount").value);
+
+    if (!title || !amount) return alert("Enter valid data");
+    data.push({ title, amount });
+    render();
+}
+
+function removeExpense(i) {
+    data.splice(i, 1);
+    render();
+}
+
+render();
+</script>
+</body>
+</html>
 
